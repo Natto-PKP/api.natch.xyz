@@ -1,0 +1,9 @@
+node_modules
+package-lock.json
+
+.env
+
+dist
+data
+tmp
+waiting

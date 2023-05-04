@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: ${PROJECT_NAME}-database
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DATABASE: ${PG_DATABASE}
+
+  # cache:
+  #   image: redis:latest
+  #   container_name: ${PROJECT_NAME}-cache
+  #   restart: always
+  #   expose:
+  #     - ${REDIS_PORT}
+  #   volumes:
+  #     - cache:/data
+  #   command: redis-server --save 20 1 --loglevel warning
+
+  api:
+    image: node:latest
+    restart: always
+    container_name: ${PROJECT_NAME}-api
+    working_dir: /src/${PROJECT_NAME}
+    # environment:
+    #   REDIS_HOST: cache
+    #   REDIS_POST: ${REDIS_PORT}
+    volumes:
+      - ./:/src/${PROJECT_NAME}
+    # links:
+    #   - ${PROJECT_NAME}-cache
+    command: bash -c "npm config set cache /tmp --global && npm i --production=false && npm run build && node dist/index.js"
+    depends_on:
+      - postgres
+      # - cache
+# volumes:
+#   cache:
+#     driver: local
