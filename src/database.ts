@@ -1,8 +1,10 @@
 import { Sequelize } from 'sequelize-typescript';
+import dotenv from 'dotenv';
+import { UserModel, TarotCardModel, UserTarotCardModel } from './models';
 
-import { CompanyModel, EmployeeModel } from './models';
+dotenv.config();
 
-const models = [CompanyModel, EmployeeModel];
+const models = [UserModel, TarotCardModel, UserTarotCardModel];
 
 const database = new Sequelize({
   username: process.env.PG_USER,
@@ -15,8 +17,18 @@ const database = new Sequelize({
   models,
 });
 
-// database.sync({ alter: true });
-// database.sync({ force: true });
+database.sync({ alter: true });
 // database.drop({ cascade: true });
+// database.sync({ force: true }).then(async () => {
+//   const password = await bcrypt.hash('IreallyL0veFerret!', 10);
+//   UserModel.create({
+//     username: 'system',
+//     password,
+//     email: 'system@system.com',
+//     pseudo: 'System',
+//     roles: ['OWNER', 'BASIC_USER'],
+//     permissions: UserPermissionArray,
+//   });
+// });
 
 export default database;

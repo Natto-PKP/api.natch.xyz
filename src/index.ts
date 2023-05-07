@@ -1,3 +1,5 @@
 import server from './server';
 
-server.listen(process.env.API_PORT || 8888);
+const PORT = process.env.API_PORT || 8888;
+
+server.listen(PORT, () => console.log(`here : http://localhost:${PORT}`));
