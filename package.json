@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon",
-    "start": "node build/index.js",
+    "start": "node ./build/index.js",
     "test": "jest"
   },
   "license": "ISC",
