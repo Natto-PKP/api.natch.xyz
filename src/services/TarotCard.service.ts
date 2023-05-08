@@ -25,8 +25,8 @@ export default class TarotCardService {
   }
 
   static async search(query: Types.TarotCardSearchQuery) {
-    const limit = PaginationService.getLimit(query.limit);
-    const page = PaginationService.getPage(query.page);
+    const limit = PaginationService.getLimit(query.limit ? Number(query.limit) : undefined);
+    const page = PaginationService.getPage(query.page ? Number(query.page) : undefined);
     const offset = PaginationService.calcOffset(page, limit);
 
     const where = { } as any;

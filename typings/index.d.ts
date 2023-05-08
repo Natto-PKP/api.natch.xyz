@@ -4,8 +4,8 @@ import type { UserRoleType } from '../src/enums/UserRoles.enum';
 
 // # GLOBAL
 export interface PaginationInterface {
-  page: number;
-  limit: number;
+  page: string;
+  limit: string;
 }
 
 export interface Request extends ExpressRequest {

@@ -34,15 +34,15 @@ export default {
       password,
       permissions: Joi.array().items(Joi.string().valid(...UserPermissionArray)),
       roles: Joi.array().items(Joi.string().valid(...UserRoleArray)),
-      points: Joi.number().integer().min(0),
+      points: Joi.number().integer().positive(),
     }).required().min(1).max(4),
   },
   query: {
     search: Joi.object({
       pseudo: Joi.string(),
       username: Joi.string(),
-      page: Joi.number().integer().min(0),
-      limit: Joi.number().integer().min(0),
+      page: Joi.string().regex(/^[0-9]+$/),
+      limit: Joi.string().regex(/^[0-9]+$/),
     }),
   },
 };

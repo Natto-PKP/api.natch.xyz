@@ -16,8 +16,8 @@ export default class UserTarotCardService {
   }
 
   static async getAll(userId: string, query: TarotCardSearchQuery) {
-    const limit = PaginationService.getLimit(query.limit);
-    const page = PaginationService.getPage(query.page);
+    const limit = PaginationService.getLimit(query.limit ? Number(query.limit) : undefined);
+    const page = PaginationService.getPage(query.page ? Number(query.page) : undefined);
     const offset = PaginationService.calcOffset(page, limit);
 
     const tarotCards = await UserTarotCardModel.findAll({
