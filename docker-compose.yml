@@ -23,6 +23,8 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_api
     restart: always
     build: /DockerFile
+    volumes:
+      - home/ubuntu/containers/api.natchy.xyz:./env
     ports:
       - 8000:8000
     # environment:
