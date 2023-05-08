@@ -5,4 +5,3 @@ WORKDIR /user/app
 COPY . .
 RUN npm run build
 WORKDIR /user/app/build
-CMD node index.js
