@@ -23,13 +23,13 @@ services:
     image: node:latest
     restart: always
     container_name: ${COMPOSE_PROJECT_NAME}_api
-    working_dir: /src/${PROJECT_FOLDER}
+    working_dir: /usr/app
     ports:
       - 8000:8000
     # environment:
     #   REDIS_HOST: cache
     volumes:
-      - .:/usr/app/
+      - .:/usr/app
       - /usr/app/node_modules
     # links:
     #   - ${COMPOSE_PROJECT_NAME}-cache
