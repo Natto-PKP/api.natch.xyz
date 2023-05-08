@@ -22,7 +22,7 @@ services:
   api:
     container_name: ${COMPOSE_PROJECT_NAME}_api
     restart: always
-    build: /DockerFile
+    build: DockerFile
     ports:
       - 8000:8000
     # environment:
