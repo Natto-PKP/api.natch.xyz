@@ -3,7 +3,7 @@ services:
   postgres:
     image: postgres
     restart: always
-    container_name: ${PROJECT_NAME}-database
+    container_name: ${PROJECT_NAME}_database
     environment:
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASSWORD}
@@ -22,7 +22,7 @@ services:
   api:
     image: node:latest
     restart: always
-    container_name: ${PROJECT_NAME}-api
+    container_name: ${PROJECT_NAME}_api
     working_dir: /src/${PROJECT_NAME}
     # environment:
     #   REDIS_HOST: cache
