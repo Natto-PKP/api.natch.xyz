@@ -33,7 +33,7 @@ services:
       - /usr/app/node_modules
     # links:
     #   - ${COMPOSE_PROJECT_NAME}-cache
-    command: bash -c "npm config set cache /tmp --global && npm i && npm run build && npm run start"
+    command: bash -c "npm config set cache /tmp --global && npm i --omit=dev && npm run build && npm run start"
     depends_on:
       - postgres
       # - cache
