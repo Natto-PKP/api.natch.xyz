@@ -3,7 +3,7 @@ services:
   postgres:
     image: postgres
     restart: always
-    container_name: ${PROJECT_NAME}_database
+    container_name: ${COMPOSE_PROJECT_NAME}_database
     environment:
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASSWORD}
@@ -11,7 +11,7 @@ services:
 
   # cache:
   #   image: redis:latest
-  #   container_name: ${PROJECT_NAME}-cache
+  #   container_name: ${COMPOSE_PROJECT_NAME}-cache
   #   restart: always
   #   expose:
   #     - ${REDIS_PORT}
@@ -22,15 +22,15 @@ services:
   api:
     image: node:latest
     restart: always
-    container_name: ${PROJECT_NAME}_api
-    working_dir: /src/${PROJECT_NAME}
+    container_name: ${COMPOSE_PROJECT_NAME}_api
+    working_dir: /src/${PROJECT_FOLDER}
     # environment:
     #   REDIS_HOST: cache
     #   REDIS_POST: ${REDIS_PORT}
     volumes:
       - ./:/src/${PROJECT_FOLDER}
     # links:
-    #   - ${PROJECT_NAME}-cache
+    #   - ${COMPOSE_PROJECT_NAME}-cache
     command: bash -c "npm config set cache /tmp --global && npm i --production=false && npm run build && node dist/index.js"
     depends_on:
       - postgres
