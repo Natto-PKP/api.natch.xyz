@@ -1,0 +1,8 @@
+FROM node:latest as base
+RUN npm config set cache /tmp --global
+RUN npm i
+WORKDIR /user/app
+COPY . .
+RUN npm run build
+WORKDIR /user/app/build
+CMD node index.js

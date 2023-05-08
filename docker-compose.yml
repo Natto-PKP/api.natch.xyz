@@ -20,19 +20,15 @@ services:
   #   command: redis-server --save 20 1 --loglevel warning
 
   api:
-    image: node:latest
-    restart: always
     container_name: ${COMPOSE_PROJECT_NAME}_api
-    working_dir: /usr/app
+    restart: always
+    build: DockerFile
     ports:
       - 8000:8000
-    volumes:
-      - ./:/user/app
     # environment:
     #   REDIS_HOST: cache
     # links:
     #   - ${COMPOSE_PROJECT_NAME}-cache
-    command: bash -c "npm config set cache /tmp --global && npm i && npm run build && npm run start"
     depends_on:
       - postgres
       # - cache
