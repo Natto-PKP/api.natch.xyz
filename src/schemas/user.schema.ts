@@ -24,7 +24,7 @@ export default {
     }).required().length(4),
 
     refresh: Joi.object({
-      refreshToken: Joi.string().regex(CheckUtil.JWT_TOKEN).required(),
+      refreshToken: Joi.string().required(),
     }).required().length(1),
 
     update: Joi.object({
