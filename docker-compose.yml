@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASSWORD}
-      POSTGRES_DATABASE: ${PG_DATABASE}
+      POSTGRES_DB: ${PG_DATABASE}
 
   # cache:
   #   image: redis:latest
@@ -25,14 +25,15 @@ services:
     build: DockerFile
     ports:
       - 8000:8000
-    # environment:
+    environment:
+      PG_HOST: postgres
     #   REDIS_HOST: cache
     # links:
     #   - ${COMPOSE_PROJECT_NAME}-cache
     depends_on:
       - postgres
       # - cache
-    command: node index.js
+    command: bash -c "rm -rf node_modules build && npm i && npm run build && npm start"
 # volumes:
 #   cache:
 #     driver: local
