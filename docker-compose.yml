@@ -23,9 +23,7 @@ services:
   api:
     container_name: ${COMPOSE_PROJECT_NAME}_api
     restart: always
-    build:
-      context: .
-      dockerfile: ./DockerFile
+    build: ./DockerFile
     ports:
       - 8000:8000
     environment:
@@ -36,7 +34,6 @@ services:
     depends_on:
       - postgres
       # - cache
-    command: bash -c 'rm -rf node_modules build && npm i && npm run build && npm start'
 # volumes:
 #   cache:
 #     driver: local
