@@ -25,7 +25,7 @@ services:
     restart: always
     ports:
       - 8000:8000
-    workdir: /usr/app
+    working_dir: /usr/app
     volumes:
       - ./:/usr/app
     environment:
