@@ -20,16 +20,16 @@ services:
   #   command: redis-server --save 20 1 --loglevel warning
 
   api:
+    container_name: ${COMPOSE_PROJECT_NAME}_api
+    restart: always
     build:
       context: .
       dockerfile: DockerFile
-    container_name: ${COMPOSE_PROJECT_NAME}_api
-    restart: always
     ports:
       - 8000:8000
     environment:
       PG_HOST: postgres
-    #   REDIS_HOST: cache
+    # REDIS_HOST: cache
     # links:
     #   - ${COMPOSE_PROJECT_NAME}-cache
     depends_on:
