@@ -1,7 +1,7 @@
 FROM node:latest
 WORKDIR /app
-COPY . .
-RUN rm -rf build node_modules
+COPY package*.json /app
 RUN npm i
+COPY . /app
 RUN npm run build
-RUN npm start
+CMD ["npm", "start"]
