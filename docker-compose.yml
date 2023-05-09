@@ -1,4 +1,5 @@
 version: '3'
+
 services:
   postgres:
     image: postgres:latest
@@ -35,7 +36,7 @@ services:
     depends_on:
       - postgres
       # - cache
-    command: bash -c "rm -rf node_modules build && npm i && npm run build && npm start"
+    command: bash -c 'rm -rf node_modules build && npm i && npm run build && npm start'
 # volumes:
 #   cache:
 #     driver: local
