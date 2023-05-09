@@ -25,6 +25,9 @@ services:
     restart: always
     ports:
       - 8000:8000
+    workdir: /usr/app
+    volumes:
+      - ./:/usr/app
     environment:
       PG_HOST: postgres
     #   REDIS_HOST: cache
