@@ -15,6 +15,9 @@ export interface IUser extends ICore {
   settings: IUserSettings;
 }
 
+export const UsernameRegex = /^[a-z](?:[a-z]*_?[a-z]+){3,32}$/;
+export const PasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
+
 export const DEFAULT_USER_SETTINGS: IUserSettings = {};
 
 @Table({ tableName: 'user' })
@@ -31,12 +34,12 @@ export class UserModel extends CoreModel implements IUser {
 
   @AllowNull(false)
   @Unique
-  @Column({ type: DataType.TEXT })
+  @Column({ type: DataType.TEXT, validate: { is: UsernameRegex } })
   declare username: string;
 
   @AllowNull(true)
   @Unique
-  @Column({ type: DataType.TEXT })
+  @Column({ type: DataType.TEXT, validate: { isEmail: true } })
   declare email?: string | null;
 
   @AllowNull(true)

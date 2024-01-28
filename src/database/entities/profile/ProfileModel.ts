@@ -32,6 +32,8 @@ export interface IProfile extends ICore {
   userId: string;
 }
 
+export const PseudoRegex = /^[A-Za-z0-9](?:[A-Za-z0-9]*[-_ :]?[A-Za-z0-9]+){3,32}$/;
+
 @Table({ tableName: 'profile' })
 export class ProfileModel extends CoreModel implements IProfile {
   @PrimaryKey
@@ -49,7 +51,7 @@ export class ProfileModel extends CoreModel implements IProfile {
   declare name: string;
 
   @AllowNull(false)
-  @Column({ type: DataType.TEXT })
+  @Column({ type: DataType.TEXT, validate: { is: PseudoRegex } })
   declare pseudo: string;
 
   @AllowNull(true)
