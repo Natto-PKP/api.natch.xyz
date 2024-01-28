@@ -1,4 +1,14 @@
-import { AllowNull, BelongsTo, Column, DataType, Default, ForeignKey, PrimaryKey, Table } from 'sequelize-typescript';
+import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  DataType,
+  Default,
+  ForeignKey,
+  PrimaryKey,
+  Table,
+  Unique,
+} from 'sequelize-typescript';
 import { v4 as uuid } from 'uuid';
 import { UserModel } from '../.';
 import { CoreModel, type ICore } from '../../CoreModel';
@@ -36,6 +46,7 @@ export class CommunityGroupModel extends CoreModel implements ICommunityGroup {
   declare id: string;
 
   @AllowNull(false)
+  @Unique
   @Column({ type: DataType.TEXT })
   declare identifier: string;
 
