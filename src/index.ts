@@ -1,5 +1,10 @@
-import server from './server';
+import { Server } from './server';
+import { DatabaseService } from './database/DatabaseService';
 
 const PORT = process.env.API_PORT || 8888;
 
-server.listen(PORT, () => console.log(`here : http://localhost:${PORT}`));
+Server.listen(PORT, async () => {
+  DatabaseService.sync(); // Connect and sync database models with Sequelize
+  console.log('✅ Database connected');
+  console.log(`here : http://localhost:${PORT}`);
+});

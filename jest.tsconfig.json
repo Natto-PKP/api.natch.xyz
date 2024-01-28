@@ -1,4 +1,4 @@
 {
-  "include": ["tests", "src"],
-  "extends": "./tsconfig.json"
+  "include": ["**/*.test.ts", "jest.setup.ts"],
+  "exclude": ["node_modules", "dist"]
 }

@@ -1,0 +1,212 @@
+Table user {
+  id text [pk, note: "uuid"]
+  identifier text [not null, unique, note: "readable id"]
+  username text [not null, unique, note: "eg: some_user or someuser"]
+  email text [unique, note: "email"]
+  password text [note: "hashed"] 
+  is_verified bool [not null, default: false, note: "verified account"]
+  allow_nsfw bool [not null, default: false, note: "allow nsfw content"]
+  // allow_free_follow bool [not null, default: false, note: "allow free follow"]
+  // allow_follow_request bool [not null, default: false, note: "allow follow request"]
+  settings json [not null, note: "settings of the user"]
+  Note: "An human"
+}
+
+Table related_account {
+  id text [pk, note: "uuid"]
+  name text [not null, unique, note: "eg: #someruser on Twitter"]
+  type enum [not null, note: "twitter, instagram, facebook, etc"] 
+  url text [note: "eg: https://twitter.com/someuser"]  
+  related_account_id text [note: "id of the account on the other platform"] 
+  related_account_secret text [note: "hashed - secret token"]
+  related_account_token text [note: "hashed - access token"]
+  is_nsfw bool [not null, default: false, note: "nsfw account, don't show it"]
+  user_id text [not null, note: "can be used to display a profile page or to login"]
+  Note: "An account on another platform, linked to an user. Can be used to display a profile page or to login."
+}
+
+Ref: user.id < related_account.user_id [delete: cascade, update: no action]
+
+Table profile {
+  id text [pk, note: "uuid"]
+  user_id text [not null]
+  identifier text [not null, unique, note: "readable id"]
+  name text [not null, note: "eg: Some Profile", default: "Some User"]
+  pseudo text [not null, note: "eg: Some User"] 
+  avatar text [note: "url of the avatar or id of the file"]
+  banner text [note: "url of the banner or id of the file"]
+  primary_color text [note: "primary color of the user profile"]
+  secondary_color text [note: "secondary color of the user profile"]
+  emoji text [note: "emoji of the user profile"]
+  status text [note: "status of the user profile"]
+  about_me text [note: "about me of the user profile"]
+  languages bigint [not null, default: 0, note: "languages of the user profile"]
+  is_private bool [not null, default: true, note: "private profile, don't show in search"]
+  is_default bool [not null, default: false, note: "default profile"]
+  is_nsfw bool [not null, default: false, note: "nsfw profile, don't show in search"]
+  Note: "A profile, allow to customize a user profile. A user has multiple profiles. An user need at least one profile"
+}
+
+Ref: user.id < profile.user_id [delete: cascade, update: no action]
+
+Table profile_tag {
+  id text [pk, note: "uuid"]
+  identifier text [not null, unique, note: "readable id"]
+  name text [not null, unique, note: "eg: Some Tag"]
+  description text [note: "eg: Some Tag is a tag"]
+  is_nsfw bool [not null, default: false, note: "nsfw tag, don't show in search"] 
+  is_verified bool [not null, default: false, note: "verified tag, don't show in search if not verified"]
+  is_blocked bool [not null, default: false, note: "blocked tag, don't show in search"]
+  icon text [note: "url of the icon or id of the file"]
+  color text [note: "color of the tag"]
+  Note: "A tag, allow to categorize profiles"
+}
+
+Table profile_has_tag {
+  profile_id text [pk]
+  tag_id text [pk]
+  Note: "A profile has multiple tags"
+}
+
+Ref: profile.id < profile_has_tag.profile_id [delete: cascade, update: no action]
+Ref: profile_tag.id < profile_has_tag.tag_id [delete: cascade, update: no action]
+
+Table profile_has_related_account {
+  profile_id text [pk]
+  related_account_id text [pk]
+  Note: "A profile has multiple related accounts"
+}
+
+Ref: profile.id < profile_has_related_account.profile_id [delete: cascade, update: no action]
+Ref: related_account.id < profile_has_related_account.related_account_id [delete: cascade, update: no action]
+  
+Table community {
+  id text [pk, note: "uuid"]
+  identifier text [not null, unique, note: "readable id"]
+  name text [not null, unique, note: "eg: Some community"]
+  short_description text [note: "eg: Some community is a community of some people"]
+  description text [note: "eg: long description of the community with markdown"]
+  categories bigint [not null, default: 0, note: "tags of the community"]
+  languages bigint [not null, default: 0, note: "languages of the community"]
+  is_private bool [not null, default: true, note: "private community, don't show in search"]
+  is_nsfw bool [not null, default: false, note: "nsfw community, don't show in search"]
+  is_verified bool [not null, default: false, note: "verified community"]
+  user_can_join bool [not null, default: true, note: "allow users to join the community"]
+  icon text [note: "url of the icon or id of the file"]
+  banner text [note: "url of the banner or id of the file"]
+  primary_color text [note: "primary color of the community"]
+  secondary_color text [note: "secondary color of the community"] 
+  settings json [not null, note: "settings of the community"]
+  owner_id text [note: "id of the owner of the community"]
+  Note: "A community, allow to create communities"
+} 
+
+Ref: user.id < community.owner_id [delete: set null, update: no action]
+
+Table community_group {
+  id text [pk, note: "uuid"]
+  identifier text [not null, unique, note: "readable id"]
+  name text [not null, unique, note: "eg: Some Group"]
+  description text [note: "eg: Some Group is a group of some communitys"]
+  type enum [not null, note: "like discord, slack, etc"]
+  is_external bool [not null, default: false, note: "external group, maybe it's useless to have this field"]
+  url text [note: "eg: https://discord.gg/somegroup"]
+  external_id text [note: "id of the group on the other platform"]
+  is_private bool [not null, default: false, note: "private group, don't show in search"]
+  is_nsfw bool [not null, default: false, note: "nsfw group, don't show in search"]
+  is_verified bool [not null, default: false, note: "verified group"]
+  is_managed bool [not null, default: false, note: "managed by the official application"]
+  icon text [note: "url of the icon or id of the file"]
+  color text [note: "color of the group"]
+  settings json [note: "settings of the group"]
+  community_id text [not null, note: "id of the community"]
+  Note: "A group, allow to categorize communitys"
+}
+
+Ref: community.id < community_group.community_id [delete: cascade, update: no action]
+
+Table community_tag {
+  id text [pk, note: "uuid"]
+  identifier text [not null, unique, note: "readable id"]
+  name text [not null, unique, note: "eg: Some Tag"]
+  description text [note: "eg: Some Tag is a tag"]
+  is_nsfw bool [not null, default: false, note: "nsfw tag, don't show in search"]
+  is_verified bool [not null, default: false, note: "verified tag, don't show in search if not verified"]
+  is_blocked bool [not null, default: false, note: "blocked tag, don't show in search"]
+  icon text [note: "url of the icon or id of the file"]
+  color text [note: "color of the tag"]
+  Note: "A tag, allow to categorize communities"
+}
+
+Table community_has_tag {
+  community_id text [pk]
+  tag_id text [pk]
+  Note: "A community has multiple tags"
+}
+
+Ref: community.id < community_has_tag.community_id [delete: cascade, update: no action]
+Ref: community_tag.id < community_has_tag.tag_id [delete: cascade, update: no action]
+
+Table community_role {
+  id text [pk, note: "uuid"]
+  name text [not null, unique, note: "eg: Some Role"]
+  description text [note: "eg: Some Role is a role of some community"]
+  is_private bool [not null, default: false, note: "private role, don't show in search"]
+  permissions bigint [not null, default: 0, note: "permissions of the role"]
+  order int [not null, default: 0, note: "order of the role in the list of roles of the community"]
+  category text [note: "category of the role"]
+  color text [note: "color of the role"]
+  is_auto_attributable bool [not null, default: false, note: "allow to an user to auto-assign the role"]
+  is_managed bool [not null, default: false, note: "managed by the official application"]
+  new_member_role bool [not null, default: false, note: "role given to new members"]
+
+  community_id text [not null]
+  Note: "A role, allow to customize permissions of a community"
+}
+
+Ref: community.id < community_role.community_id [delete: cascade, update: no action]
+
+Table member {
+  id text [pk, note: "uuid"]
+  user_id text [not null]
+  community_id text [not null]
+  profile_id text [not null, note: "id of the profile used in the community"]
+  invite_id text [note: "id of the invite used to join the community"]
+  Note: "A user has a community"
+
+  indexes {
+    (user_id, community_id) [unique] 
+  }
+}
+
+Ref: user.id < member.user_id [delete: cascade, update: no action]
+Ref: community.id < member.community_id [delete: cascade, update: no action]
+Ref: profile.id < member.profile_id [delete: set null, update: no action]
+Ref: community_invite.id < member.invite_id [delete: set null, update: no action]
+
+Table community_invite {
+  id text [pk, note: "uuid"]
+  community_id text [note: "id of the community to join"]
+  member_id text [note: "id of the member who created the invite"]
+  label text [note: "label of the invite"]
+  code text [not null, unique, note: "code of the invite"]
+  max_uses int [note: "max uses of the invite"]
+  uses int [not null, default: 0, note: "uses of the invite"]
+  expires_at timestamp [note: "date of expiration of the invite"]
+  settings json [note: "settings of the invite"]
+  Note: "An invite, allow to join a community"
+}
+
+Ref: community.id < community_invite.community_id [delete: cascade, update: no action]
+Ref: member.id < community_invite.member_id [delete: cascade, update: no action]
+
+Table member_role {
+  user_in_community text [pk] 
+  role_id text [pk]
+  added_by_id text [note: "id of the user who added the role"] 
+  Note: "A user has multiple roles in communitys"
+}
+
+Ref: member.id < member_role.user_in_community [delete: cascade, update: no action]
+Ref: community_role.id < member_role.role_id [delete: cascade, update: no action]
+Ref: user.id < member_role.added_by_id [delete: set null, update: no action]

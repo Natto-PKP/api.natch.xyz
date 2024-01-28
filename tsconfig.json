@@ -1,7 +1,10 @@
 {
-  "include": ["src", "public", "typings"],
-  "exclude": ["data", "node_modules"],
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "data"],
+
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+
     //! Type Checking
     "alwaysStrict": true,
     "allowUnreachableCode": false,
@@ -30,18 +33,18 @@
     //! Emit
     "declaration": true,
     "importHelpers": true,
+    "importsNotUsedAsValues": "error",
     "inlineSources": true,
     "newLine": "lf",
     "noEmitHelpers": true,
-    "outDir": "build",
+    "outDir": "dist",
     "preserveConstEnums": true,
     "removeComments": false,
     "sourceMap": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    // "forceConsistentCasingInFileNames": true,
 
     //! Language and Environment
-    "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["ESNext"],

@@ -1,14 +1,15 @@
 import Express from 'express';
 import cors from 'cors';
-import routes from './routes';
-import './database';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 
-const server = Express();
+dotenv.config(); // Load environment variables from .env file
 
-server.use(Express.urlencoded({ extended: true }));
-server.use(Express.json());
-server.use(cors());
+export const Server = Express();
 
-server.use(routes);
+Server.use(Express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+Server.use(cookieParser(process.env.SIGNED_COOKIE_SECRET)); // Parse cookies
+Server.use(Express.json()); // Parse JSON bodies
+Server.use(cors()); // Allow all origins
 
-export default server;
+// Server.use(VersionRouter);
