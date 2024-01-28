@@ -1,9 +1,7 @@
 import Express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
-
-dotenv.config(); // Load environment variables from .env file
+import './dotenv';
 
 export const Server = Express();
 
