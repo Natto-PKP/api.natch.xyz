@@ -7,8 +7,17 @@ export const DEFAULT_LIMIT = 100;
 export type IPagination = { offset: number; limit: number; page: number };
 
 export const PaginationSchemaData = {
-  page: Joi.number().integer().positive().allow(0),
   limit: Joi.number().integer().positive(),
+  page: Joi.alternatives().conditional('offset', {
+    is: Joi.exist(),
+    then: Joi.forbidden(),
+    otherwise: Joi.number().integer().positive(),
+  }),
+  offset: Joi.alternatives().conditional('page', {
+    is: Joi.exist(),
+    then: Joi.forbidden(),
+    otherwise: Joi.number().integer().positive(),
+  }),
 };
 
 export class Pagination {

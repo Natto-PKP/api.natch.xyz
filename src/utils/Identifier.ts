@@ -25,4 +25,8 @@ export class Identifier {
     const result = Array.from({ length }, () => arr[Math.floor(Math.random() * arr.length)]);
     return result.join('');
   }
+
+  static batch(count: number, options?: Partial<BaseOptions>) {
+    return Array.from({ length: count }, () => Identifier.generate(options));
+  }
 }
