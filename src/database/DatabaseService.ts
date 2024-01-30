@@ -2,15 +2,15 @@ import { Sequelize } from 'sequelize-typescript';
 import '../dotenv';
 
 import {
-  RelatedAccountModel,
+  PlatformModel,
   TagModel,
   UserModel,
-  UserHasRelatedAccountModel,
+  UserHasPlatformModel,
   ProfileModel,
-  ProfileHasRelatedAccountModel,
+  ProfileHasPlatformModel,
   ProfileHasTagModel,
   TeamModel,
-  TeamHasRelatedAccountModel,
+  TeamHasPlatformModel,
   TeamHasTagModel,
   TeamInviteModel,
   TeamRoleModel,
@@ -19,15 +19,15 @@ import {
 } from './entities';
 
 const models = [
-  RelatedAccountModel,
+  PlatformModel,
   TagModel,
   UserModel,
-  UserHasRelatedAccountModel,
+  UserHasPlatformModel,
   ProfileModel,
-  ProfileHasRelatedAccountModel,
+  ProfileHasPlatformModel,
   ProfileHasTagModel,
   TeamModel,
-  TeamHasRelatedAccountModel,
+  TeamHasPlatformModel,
   TeamHasTagModel,
   TeamInviteModel,
   TeamRoleModel,

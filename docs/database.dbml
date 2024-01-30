@@ -11,14 +11,14 @@ Table tag {
   Note: "A tag, allow to categorize profiles"
 }
 
-Table related_account {
+Table platform {
   id text [pk, note: "uuid"]
   name text [not null, unique, note: "eg: #someruser on Twitter"]
   type enum [not null, note: "discord, twitter, instagram, facebook, etc"] 
   url text [note: "eg: https://twitter.com/someuser"]  
-  related_account_id text [note: "id of the account on the other platform"] 
-  related_account_secret text [note: "hashed - secret token"]
-  related_account_token text [note: "hashed - access token"]
+  platform_id text [note: "id of the account on the other platform"] 
+  platform_secret text [note: "hashed - secret token"]
+  platform_token text [note: "hashed - access token"]
   is_nsfw bool [not null, default: false, note: "nsfw account, don't show it"]
   Note: "An account on another platform, linked to an user. Can be used to display a profile page or to login."
 }
@@ -37,17 +37,17 @@ Table user {
   Note: "An human"
 }
 
-Table user_has_related_account {
+Table user_has_platform {
   user_id text [pk]
-  related_account_id text [pk]
+  platform_id text [pk]
   description text [note: "description of the related account"]
   settings json [not null, note: "settings of the related account"]
   visibility enum [not null, note: "public, private, etc"]
   Note: "A team has multiple related accounts"
 }
 
-Ref: user.id < user_has_related_account.user_id [delete: cascade, update: no action]
-Ref: related_account.id < user_has_related_account.related_account_id [delete: cascade, update: no action] 
+Ref: user.id < user_has_platform.user_id [delete: cascade, update: no action]
+Ref: platform.id < user_has_platform.platform_id [delete: cascade, update: no action] 
 
 Table profile {
   id text [pk, note: "uuid"]
@@ -80,14 +80,14 @@ Table profile_has_tag {
 Ref: profile.id < profile_has_tag.profile_id [delete: cascade, update: no action]
 Ref: tag.id < profile_has_tag.tag_id [delete: cascade, update: no action]
 
-Table profile_has_related_account {
+Table profile_has_platform {
   profile_id text [pk]
-  related_account_id text [pk]
+  platform_id text [pk]
   Note: "A profile has multiple related accounts"
 }
 
-Ref: profile.id < profile_has_related_account.profile_id [delete: cascade, update: no action]
-Ref: related_account.id < profile_has_related_account.related_account_id [delete: cascade, update: no action]
+Ref: profile.id < profile_has_platform.profile_id [delete: cascade, update: no action]
+Ref: platform.id < profile_has_platform.platform_id [delete: cascade, update: no action]
   
 Table team {
   id text [pk, note: "uuid"]
@@ -113,17 +113,17 @@ Table team {
 
 Ref: user.id < team.owner_id [delete: set null, update: no action]
 
-Table team_has_related_account {
+Table team_has_platform {
   team_id text [pk]
-  related_account_id text [pk]
+  platform_id text [pk]
   description text [note: "description of the related account"]
   settings json [not null, note: "settings of the related account"]
   visibility enum [not null, note: "public, private, etc"]
   Note: "A team has multiple related accounts"
 }
 
-Ref: team.id < team_has_related_account.team_id [delete: cascade, update: no action]
-Ref: related_account.id < team_has_related_account.related_account_id [delete: cascade, update: no action] 
+Ref: team.id < team_has_platform.team_id [delete: cascade, update: no action]
+Ref: platform.id < team_has_platform.platform_id [delete: cascade, update: no action] 
 
 Table team_has_tag {
   team_id text [pk]
