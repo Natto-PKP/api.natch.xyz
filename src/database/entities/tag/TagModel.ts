@@ -1,6 +1,17 @@
-import { AllowNull, Column, DataType, Default, PrimaryKey, Table, Unique } from 'sequelize-typescript';
+import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  DataType,
+  Default,
+  ForeignKey,
+  PrimaryKey,
+  Table,
+  Unique,
+} from 'sequelize-typescript';
 import { v4 as uuid } from 'uuid';
 import { CoreModel, type ICore } from '../../CoreModel';
+import { UserModel } from '../user/UserModel';
 
 export interface ITag extends ICore {
   id: string;
@@ -10,6 +21,9 @@ export interface ITag extends ICore {
   isNsfw: boolean;
   isVerified: boolean;
   isBlocked: boolean;
+  blockedReason?: string | null;
+  blockedById?: string | null;
+  blockedAt?: Date | null;
   icon?: string | null;
   color?: string | null;
 }
@@ -52,9 +66,25 @@ export class TagModel extends CoreModel implements ITag {
 
   @AllowNull(true)
   @Column({ type: DataType.TEXT })
+  declare blockReason?: string | null;
+
+  @AllowNull(true)
+  @ForeignKey(() => UserModel)
+  @Column({ type: DataType.TEXT })
+  declare blockedById?: string | null;
+
+  @AllowNull(true)
+  @Column({ type: DataType.DATE })
+  declare blockedAt?: Date | null;
+
+  @AllowNull(true)
+  @Column({ type: DataType.TEXT })
   declare icon?: string | null;
 
   @AllowNull(true)
   @Column({ type: DataType.TEXT })
   declare color?: string | null;
+
+  @BelongsTo(() => UserModel, { foreignKey: 'blocked_by_id', onDelete: 'SET NULL' })
+  declare blockedBy?: UserModel | null;
 }

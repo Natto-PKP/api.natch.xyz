@@ -1,16 +1,3 @@
-Table tag {
-  id text [pk, note: "uuid"]
-  identifier text [not null, unique, note: "readable id"]
-  name text [not null, unique, note: "eg: Some Tag"]
-  description text [note: "eg: Some Tag is a tag"]
-  is_nsfw bool [not null, default: false, note: "nsfw tag, don't show in search"] 
-  is_verified bool [not null, default: false, note: "verified tag, don't show in search if not verified"]
-  is_blocked bool [not null, default: false, note: "blocked tag, don't show in search"]
-  icon text [note: "url of the icon or id of the file"]
-  color text [note: "color of the tag"]
-  Note: "A tag, allow to categorize profiles"
-}
-
 Table platform {
   id text [pk, note: "uuid"]
   name text [not null, unique, note: "eg: #someruser on Twitter"]
@@ -39,6 +26,24 @@ Table user {
   settings json [not null, note: "settings of the user"]
   Note: "An human"
 }
+
+Table tag {
+  id text [pk, note: "uuid"]
+  identifier text [not null, unique, note: "readable id"]
+  name text [not null, unique, note: "eg: Some Tag"]
+  description text [note: "eg: Some Tag is a tag"]
+  is_nsfw bool [not null, default: false, note: "nsfw tag, don't show in search"] 
+  is_verified bool [not null, default: false, note: "verified tag, don't show in search if not verified"]
+  is_blocked bool [not null, default: false, note: "blocked tag, don't show in search"]
+  blocked_reason text [note: "reason of the blocked tag"]
+  blocked_by_id text [note: "id of the user who blocked the tag"]
+  blocked_at timestamp [note: "date of the blocked tag"]
+  icon text [note: "url of the icon or id of the file"]
+  color text [note: "color of the tag"]
+  Note: "A tag, allow to categorize profiles"
+}
+
+Ref: user.id < tag.blocked_by_id [delete: set null, update: no action]
 
 Table user_has_platform {
   user_id text [pk]
