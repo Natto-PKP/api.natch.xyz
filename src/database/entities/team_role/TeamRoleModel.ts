@@ -10,10 +10,10 @@ import {
   Unique,
 } from 'sequelize-typescript';
 import { v4 as uuid } from 'uuid';
-import { CommunityModel } from '../.';
+import { TeamModel } from '..';
 import { CoreModel, type ICore } from '../../CoreModel';
 
-export interface ICommunityRole extends ICore {
+export interface ITeamRole extends ICore {
   id: string;
   name: string;
   description?: string | null;
@@ -25,11 +25,11 @@ export interface ICommunityRole extends ICore {
   isAutoAttributable: boolean;
   isManaged: boolean;
   newMemberRole: boolean;
-  communityId: string;
+  teamId: string;
 }
 
-@Table({ tableName: 'community_role' })
-export class CommunityRoleModel extends CoreModel implements ICommunityRole {
+@Table({ tableName: 'team_role' })
+export class TeamRoleModel extends CoreModel implements ITeamRole {
   @PrimaryKey
   @Default(uuid)
   @Column({ type: DataType.TEXT })
@@ -83,10 +83,10 @@ export class CommunityRoleModel extends CoreModel implements ICommunityRole {
   declare newMemberRole: boolean;
 
   @AllowNull(false)
-  @ForeignKey(() => CommunityModel)
+  @ForeignKey(() => TeamModel)
   @Column({ type: DataType.TEXT })
-  declare communityId: string;
+  declare teamId: string;
 
-  @BelongsTo(() => CommunityModel, { foreignKey: 'community_id', onDelete: 'CASCADE' })
-  declare community: CommunityModel;
+  @BelongsTo(() => TeamModel, { foreignKey: 'team_id', onDelete: 'CASCADE' })
+  declare team: TeamModel;
 }

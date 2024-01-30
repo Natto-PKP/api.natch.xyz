@@ -10,36 +10,36 @@ import {
   Unique,
 } from 'sequelize-typescript';
 import { v4 as uuid } from 'uuid';
-import { CommunityModel, MemberModel } from '../.';
+import { TeamModel, MemberModel } from '..';
 import { CoreModel, type ICore } from '../../CoreModel';
 
-export interface ICommunityInviteSettings {}
+export interface ITeamInviteSettings {}
 
-export interface ICommunityInvite extends ICore {
+export interface ITeamInvite extends ICore {
   id: string;
-  communityId: string;
+  teamId: string;
   memberId: string;
   label?: string | null;
   code: string;
   maxUses?: number | null;
   uses: number;
   expiresAt?: Date | null;
-  settings: ICommunityInviteSettings;
+  settings: ITeamInviteSettings;
 }
 
-const DEFAULT_COMMUNITY_INVITE_SETTINGS: ICommunityInviteSettings = {};
+const DEFAULT_TEAM_INVITE_SETTINGS: ITeamInviteSettings = {};
 
-@Table({ tableName: 'community_invite' })
-export class CommunityInviteModel extends CoreModel implements ICommunityInvite {
+@Table({ tableName: 'team_invite' })
+export class TeamInviteModel extends CoreModel implements ITeamInvite {
   @PrimaryKey
   @Default(uuid)
   @Column({ type: DataType.TEXT })
   declare id: string;
 
   @AllowNull(false)
-  @ForeignKey(() => CommunityModel)
+  @ForeignKey(() => TeamModel)
   @Column({ type: DataType.TEXT })
-  declare communityId: string;
+  declare teamId: string;
 
   @AllowNull(false)
   @ForeignKey(() => MemberModel)
@@ -69,13 +69,13 @@ export class CommunityInviteModel extends CoreModel implements ICommunityInvite 
   declare expiresAt?: Date | null;
 
   @AllowNull(false)
-  @Default(DEFAULT_COMMUNITY_INVITE_SETTINGS)
+  @Default(DEFAULT_TEAM_INVITE_SETTINGS)
   @Column({ type: DataType.JSONB })
-  declare settings: ICommunityInviteSettings;
+  declare settings: ITeamInviteSettings;
 
   @BelongsTo(() => MemberModel, { foreignKey: 'member_id', onDelete: 'CASCADE' })
   declare member: MemberModel;
 
-  @BelongsTo(() => CommunityModel, { foreignKey: 'community_id', onDelete: 'CASCADE' })
-  declare community: CommunityModel;
+  @BelongsTo(() => TeamModel, { foreignKey: 'team_id', onDelete: 'CASCADE' })
+  declare team: TeamModel;
 }

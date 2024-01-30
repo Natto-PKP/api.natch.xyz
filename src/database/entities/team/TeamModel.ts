@@ -10,36 +10,38 @@ import {
   Unique,
 } from 'sequelize-typescript';
 import { v4 as uuid } from 'uuid';
-import { UserModel } from '../.';
+import { UserModel } from '..';
 import { CoreModel, type ICore } from '../../CoreModel';
 
-export type CommunityGroupType = 'discord';
+export type TeamType = 'community' | 'organization' | 'other';
 
-export interface ICommunityGroupSettings {}
+export interface ITeamSettings {}
 
-export interface ICommunityGroup extends ICore {
+export interface ITeam extends ICore {
   id: string;
   identifier: string;
+  type: TeamType;
   name: string;
+  shortDescription?: string | null;
   description?: string | null;
-  type: CommunityGroupType;
-  isExternal: boolean;
-  url?: string | null;
-  externalId?: string | null;
+  cagegories: bigint;
+  languages: bigint;
   isPrivate: boolean;
   isNsfw: boolean;
   isVerified: boolean;
-  isManaged: boolean;
+  userCanJoin: boolean;
   icon?: string | null;
-  color?: string | null;
-  settings: ICommunityGroupSettings;
-  communityId: string;
+  banner?: string | null;
+  primaryColor?: string | null;
+  secondaryColor?: string | null;
+  settings: ITeamSettings;
+  ownerId?: string | null;
 }
 
-export const DEFAULT_COMMUNITY_GROUP_SETTINGS: ICommunityGroupSettings = {};
+export const DEFAULT_TEAM_SETTINGS: ITeamSettings = {};
 
-@Table({ tableName: 'community_group' })
-export class CommunityGroupModel extends CoreModel implements ICommunityGroup {
+@Table({ tableName: 'team' })
+export class TeamModel extends CoreModel implements ITeam {
   @PrimaryKey
   @Default(uuid)
   @Column({ type: DataType.TEXT })
@@ -51,29 +53,31 @@ export class CommunityGroupModel extends CoreModel implements ICommunityGroup {
   declare identifier: string;
 
   @AllowNull(false)
+  @Default('community')
+  @Column({ type: DataType.TEXT })
+  declare type: TeamType;
+
+  @AllowNull(false)
   @Column({ type: DataType.TEXT })
   declare name: string;
+
+  @AllowNull(true)
+  @Column({ type: DataType.TEXT })
+  declare shortDescription?: string | null;
 
   @AllowNull(true)
   @Column({ type: DataType.TEXT })
   declare description?: string | null;
 
   @AllowNull(false)
-  @Column({ type: DataType.TEXT })
-  declare type: CommunityGroupType;
+  @Default(0)
+  @Column({ type: DataType.BIGINT })
+  declare cagegories: bigint;
 
   @AllowNull(false)
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  declare isExternal: boolean;
-
-  @AllowNull(true)
-  @Column({ type: DataType.TEXT })
-  declare url?: string | null;
-
-  @AllowNull(true)
-  @Column({ type: DataType.TEXT })
-  declare externalId?: string | null;
+  @Default(0)
+  @Column({ type: DataType.BIGINT })
+  declare languages: bigint;
 
   @AllowNull(false)
   @Default(false)
@@ -93,7 +97,7 @@ export class CommunityGroupModel extends CoreModel implements ICommunityGroup {
   @AllowNull(false)
   @Default(false)
   @Column({ type: DataType.BOOLEAN })
-  declare isManaged: boolean;
+  declare userCanJoin: boolean;
 
   @AllowNull(true)
   @Column({ type: DataType.TEXT })
@@ -101,18 +105,26 @@ export class CommunityGroupModel extends CoreModel implements ICommunityGroup {
 
   @AllowNull(true)
   @Column({ type: DataType.TEXT })
-  declare color?: string | null;
+  declare banner?: string | null;
+
+  @AllowNull(true)
+  @Column({ type: DataType.TEXT })
+  declare primaryColor?: string | null;
+
+  @AllowNull(true)
+  @Column({ type: DataType.TEXT })
+  declare secondaryColor?: string | null;
 
   @AllowNull(false)
-  @Default(DEFAULT_COMMUNITY_GROUP_SETTINGS)
+  @Default(DEFAULT_TEAM_SETTINGS)
   @Column({ type: DataType.JSONB })
-  declare settings: ICommunityGroupSettings;
+  declare settings: ITeamSettings;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @ForeignKey(() => UserModel)
   @Column({ type: DataType.TEXT })
-  declare communityId: string;
+  declare ownerId?: string | null;
 
-  @BelongsTo(() => UserModel, { foreignKey: 'community_id', onDelete: 'CASCADE' })
-  declare community: UserModel;
+  @BelongsTo(() => UserModel, { foreignKey: 'owner_id', onDelete: 'CASCADE' })
+  declare owner?: UserModel | null;
 }

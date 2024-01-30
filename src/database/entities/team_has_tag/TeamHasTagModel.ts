@@ -1,26 +1,26 @@
 import { BelongsTo, Column, DataType, ForeignKey, PrimaryKey, Table } from 'sequelize-typescript';
-import { ProfileModel, TagModel } from '../.';
+import { TeamModel, TagModel } from '..';
 import { CoreModel, type ICore } from '../../CoreModel';
 
-export interface IProfileHasTag extends ICore {
-  profileId: string;
+export interface ITeamHasTag extends ICore {
+  teamId: string;
   tagId: string;
 }
 
-@Table({ tableName: 'profile_has_tag' })
-export class ProfileHasTagModel extends CoreModel implements IProfileHasTag {
-  @ForeignKey(() => ProfileModel)
+@Table({ tableName: 'team_has_tag' })
+export class TeamHasTagModel extends CoreModel implements ITeamHasTag {
+  @ForeignKey(() => TeamModel)
   @PrimaryKey
   @Column({ type: DataType.TEXT })
-  declare profileId: string;
+  declare teamId: string;
 
   @ForeignKey(() => TagModel)
   @PrimaryKey
   @Column({ type: DataType.TEXT })
   declare tagId: string;
 
-  @BelongsTo(() => ProfileModel, { foreignKey: 'profile_id', onDelete: 'CASCADE' })
-  declare profile: ProfileModel;
+  @BelongsTo(() => TeamModel, { foreignKey: 'team_id', onDelete: 'CASCADE' })
+  declare team: TeamModel;
 
   @BelongsTo(() => TagModel, { foreignKey: 'tag_id', onDelete: 'CASCADE' })
   declare tag: TagModel;

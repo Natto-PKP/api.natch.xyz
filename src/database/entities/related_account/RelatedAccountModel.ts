@@ -1,34 +1,26 @@
-import {
-  AllowNull,
-  BelongsTo,
-  Column,
-  DataType,
-  Default,
-  ForeignKey,
-  PrimaryKey,
-  Table,
-  Unique,
-} from 'sequelize-typescript';
+import { AllowNull, Column, DataType, Default, PrimaryKey, Table, Unique } from 'sequelize-typescript';
 import { v4 as uuid } from 'uuid';
-import { UserModel } from '../.';
 import { CoreModel, type ICore } from '../../CoreModel';
 
-export type UserRelatedAccountType = 'discord';
+export type RelatedAccountType = 'discord';
 
-export interface IUserRelatedAccount extends ICore {
+export interface IRelatedAccount extends ICore {
   id: string;
   name: string;
-  type: UserRelatedAccountType;
+  type: RelatedAccountType;
   url?: string | null;
   relatedAccountId?: string | null;
   relatedAccountSecret?: string | null;
   relatedAccountToken?: string | null;
   isNsfw: boolean;
-  userId: string;
 }
 
-@Table({ tableName: 'user_related_account' })
-export class UserRelatedAccountModel extends CoreModel implements IUserRelatedAccount {
+export const RelatedAccountModelArray: RelatedAccountType[] = ['discord'];
+export const RelatedAccountNameRegex = /^[a-z](?:[a-z]*_?[a-z]+){3,32}$/;
+export const RelatedAccountTypeRegex = new RegExp(`^(${RelatedAccountModelArray.join('|')})$`);
+
+@Table({ tableName: 'related_account' })
+export class RelatedAccountModel extends CoreModel implements IRelatedAccount {
   @PrimaryKey
   @Default(uuid)
   @Column({ type: DataType.TEXT })
@@ -36,12 +28,12 @@ export class UserRelatedAccountModel extends CoreModel implements IUserRelatedAc
 
   @AllowNull(false)
   @Unique
-  @Column({ type: DataType.TEXT })
+  @Column({ type: DataType.TEXT, validate: { is: RelatedAccountNameRegex } })
   declare name: string;
 
   @AllowNull(false)
-  @Column({ type: DataType.TEXT })
-  declare type: UserRelatedAccountType;
+  @Column({ type: DataType.TEXT, validate: { is: RelatedAccountTypeRegex } })
+  declare type: RelatedAccountType;
 
   @AllowNull(true)
   @Column({ type: DataType.TEXT })
@@ -63,12 +55,4 @@ export class UserRelatedAccountModel extends CoreModel implements IUserRelatedAc
   @Default(false)
   @Column({ type: DataType.BOOLEAN })
   declare isNsfw: boolean;
-
-  @AllowNull(false)
-  @ForeignKey(() => UserModel)
-  @Column({ type: DataType.TEXT })
-  declare userId: string;
-
-  @BelongsTo(() => UserModel, { foreignKey: 'user_id', onDelete: 'CASCADE' })
-  declare user: UserModel;
 }

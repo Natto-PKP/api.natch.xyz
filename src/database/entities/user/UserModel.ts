@@ -16,7 +16,7 @@ export interface IUser extends ICore {
 }
 
 export const UsernameRegex = /^[a-z](?:[a-z]*_?[a-z]+){3,32}$/;
-export const PasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/;
+export const PasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,64}$/;
 
 export const DEFAULT_USER_SETTINGS: IUserSettings = {};
 

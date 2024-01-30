@@ -1,17 +1,17 @@
 import { AllowNull, BelongsTo, Column, DataType, Default, ForeignKey, PrimaryKey, Table } from 'sequelize-typescript';
 import { v4 as uuid } from 'uuid';
-import { CommunityModel, ProfileModel, UserModel, CommunityInviteModel } from '../.';
+import { TeamModel, ProfileModel, UserModel, TeamInviteModel } from '../.';
 import { CoreModel, type ICore } from '../../CoreModel';
 
 export interface IMember extends ICore {
   id: string;
   userId: string;
-  communityId: string;
+  teamId: string;
   profileId: string;
   inviteId?: string | null;
 }
 
-@Table({ tableName: 'member', indexes: [{ unique: true, fields: ['user_id', 'community_id'] }] })
+@Table({ tableName: 'member', indexes: [{ unique: true, fields: ['user_id', 'team_id'] }] })
 export class MemberModel extends CoreModel implements IMember {
   @PrimaryKey
   @Default(uuid)
@@ -24,9 +24,9 @@ export class MemberModel extends CoreModel implements IMember {
   declare userId: string;
 
   @AllowNull(false)
-  @ForeignKey(() => CommunityModel)
+  @ForeignKey(() => TeamModel)
   @Column({ type: DataType.TEXT })
-  declare communityId: string;
+  declare teamId: string;
 
   @AllowNull(false)
   @ForeignKey(() => ProfileModel)
@@ -34,19 +34,19 @@ export class MemberModel extends CoreModel implements IMember {
   declare profileId: string;
 
   @AllowNull(true)
-  @ForeignKey(() => CommunityInviteModel)
+  @ForeignKey(() => TeamInviteModel)
   @Column({ type: DataType.TEXT })
   declare inviteId?: string | null;
 
   @BelongsTo(() => UserModel, { foreignKey: 'user_id', onDelete: 'CASCADE' })
   declare user: UserModel;
 
-  @BelongsTo(() => CommunityModel, { foreignKey: 'community_id', onDelete: 'CASCADE' })
-  declare community: CommunityModel;
+  @BelongsTo(() => TeamModel, { foreignKey: 'team_id', onDelete: 'CASCADE' })
+  declare team: TeamModel;
 
   @BelongsTo(() => ProfileModel, { foreignKey: 'profile_id', onDelete: 'RESTRICT' })
   declare profile: ProfileModel;
 
-  @BelongsTo(() => CommunityInviteModel, { foreignKey: 'invite_id', onDelete: 'SET NULL' })
-  declare invite: CommunityInviteModel;
+  @BelongsTo(() => TeamInviteModel, { foreignKey: 'invite_id', onDelete: 'SET NULL' })
+  declare invite: TeamInviteModel;
 }

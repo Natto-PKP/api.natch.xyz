@@ -2,35 +2,35 @@ import { Sequelize } from 'sequelize-typescript';
 import '../dotenv';
 
 import {
+  RelatedAccountModel,
+  TagModel,
   UserModel,
-  UserRelatedAccountModel,
+  UserHasRelatedAccountModel,
   ProfileModel,
-  ProfileHasUserRelatedAccountModel,
-  ProfileTagModel,
+  ProfileHasRelatedAccountModel,
   ProfileHasTagModel,
-  CommunityModel,
-  CommunityGroupModel,
-  CommunityTagModel,
-  CommunityHasTagModel,
-  CommunityInviteModel,
-  CommunityRoleModel,
+  TeamModel,
+  TeamHasRelatedAccountModel,
+  TeamHasTagModel,
+  TeamInviteModel,
+  TeamRoleModel,
   MemberModel,
   MemberHasRoleModel,
 } from './entities';
 
 const models = [
+  RelatedAccountModel,
+  TagModel,
   UserModel,
-  UserRelatedAccountModel,
+  UserHasRelatedAccountModel,
   ProfileModel,
-  ProfileHasUserRelatedAccountModel,
-  ProfileTagModel,
+  ProfileHasRelatedAccountModel,
   ProfileHasTagModel,
-  CommunityModel,
-  CommunityGroupModel,
-  CommunityTagModel,
-  CommunityHasTagModel,
-  CommunityInviteModel,
-  CommunityRoleModel,
+  TeamModel,
+  TeamHasRelatedAccountModel,
+  TeamHasTagModel,
+  TeamInviteModel,
+  TeamRoleModel,
   MemberModel,
   MemberHasRoleModel,
 ];
@@ -69,7 +69,7 @@ export class DatabaseService {
   }
 
   static async clear() {
-    await connection.drop();
+    await connection.drop({ cascade: true });
     await connection.sync();
   }
 

@@ -2,7 +2,7 @@ import { AllowNull, Column, DataType, Default, PrimaryKey, Table, Unique } from 
 import { v4 as uuid } from 'uuid';
 import { CoreModel, type ICore } from '../../CoreModel';
 
-export interface ICommunityTag extends ICore {
+export interface ITag extends ICore {
   id: string;
   identifier: string;
   name: string;
@@ -14,8 +14,8 @@ export interface ICommunityTag extends ICore {
   color?: string | null;
 }
 
-@Table({ tableName: 'community_tag' })
-export class CommunityTagModel extends CoreModel implements ICommunityTag {
+@Table({ tableName: 'tag' })
+export class TagModel extends CoreModel implements ITag {
   @PrimaryKey
   @Default(uuid)
   @Column({ type: DataType.TEXT })
