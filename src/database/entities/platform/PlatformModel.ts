@@ -2,12 +2,17 @@ import { AllowNull, Column, DataType, Default, PrimaryKey, Table, Unique } from 
 import { v4 as uuid } from 'uuid';
 import { CoreModel, type ICore } from '../../CoreModel';
 
-export type PlatformType = 'discord';
+export const ExternalPlatformArray = ['discord', 'twitter', 'twitch', 'youtube', 'reddit'] as const;
+export type ExternalPlatformType = (typeof ExternalPlatformArray)[number];
+
+export const PlatformArray = ['account', 'team', 'application'] as const;
+export type PlatformType = (typeof PlatformArray)[number];
 
 export interface IPlatform extends ICore {
   id: string;
   name: string;
   type: PlatformType;
+  externalType: ExternalPlatformType;
   url?: string | null;
   platformId?: string | null;
   platformSecret?: string | null;
@@ -15,9 +20,10 @@ export interface IPlatform extends ICore {
   isNsfw: boolean;
 }
 
-export const PlatformModelArray: PlatformType[] = ['discord'];
-export const PlatformNameRegex = /^[a-z](?:[a-z]*_?[a-z]+){3,32}$/;
-export const PlatformTypeRegex = new RegExp(`^(${PlatformModelArray.join('|')})$`);
+export const ExternalPlatformNameRegex = /^[a-z](?:[a-z]*_?[a-z]+){3,32}$/;
+export const ExternalPlatformTypeRegex = new RegExp(`^(${ExternalPlatformArray.join('|')})$`);
+
+export const PlatformTypeRegex = new RegExp(`^(${PlatformArray.join('|')})$`);
 
 @Table({ tableName: 'platform' })
 export class PlatformModel extends CoreModel implements IPlatform {
@@ -28,12 +34,16 @@ export class PlatformModel extends CoreModel implements IPlatform {
 
   @AllowNull(false)
   @Unique
-  @Column({ type: DataType.TEXT, validate: { is: PlatformNameRegex } })
+  @Column({ type: DataType.TEXT, validate: { is: ExternalPlatformNameRegex } })
   declare name: string;
 
   @AllowNull(false)
   @Column({ type: DataType.TEXT, validate: { is: PlatformTypeRegex } })
   declare type: PlatformType;
+
+  @AllowNull(false)
+  @Column({ type: DataType.TEXT, validate: { is: PlatformTypeRegex } })
+  declare externalType: ExternalPlatformType;
 
   @AllowNull(true)
   @Column({ type: DataType.TEXT })

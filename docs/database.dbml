@@ -14,7 +14,8 @@ Table tag {
 Table platform {
   id text [pk, note: "uuid"]
   name text [not null, unique, note: "eg: #someruser on Twitter"]
-  type enum [not null, note: "discord, twitter, instagram, facebook, etc"] 
+  type enum [not null, note: "account, team, application"]
+  platform_type enum [not null, note: "discord, twitter, instagram, facebook, etc"] 
   url text [note: "eg: https://twitter.com/someuser"]  
   platform_id text [note: "id of the account on the other platform"] 
   platform_secret text [note: "hashed - secret token"]
