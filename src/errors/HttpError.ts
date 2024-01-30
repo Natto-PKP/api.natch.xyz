@@ -1,6 +1,6 @@
 import { CoreError, CoreErrorOptions } from './CoreError';
 
-export const ErrorStatus = [
+export const HttpErrorStatus = [
   { status: 400, name: 'BAD_REQUEST', message: 'bad request', code: 5 },
   { status: 401, name: 'UNAUTHORIZED', message: 'unauthorized', code: 7 },
   { status: 403, name: 'FORBIDDEN', message: 'forbidden', code: 8 },
@@ -11,9 +11,9 @@ export const ErrorStatus = [
   { status: 503, name: 'UNAVAILABLE', message: 'unavailable', code: 0 },
 ] as const;
 
-export type ErrorStatusCodeNames = (typeof ErrorStatus)[number]['name'];
-export type ErrorStatusCodeStatus = (typeof ErrorStatus)[number]['status'];
-export type ErrorStatusCodeKeys = ErrorStatusCodeNames | ErrorStatusCodeStatus;
+export type HttpErrorStatusCodeNames = (typeof HttpErrorStatus)[number]['name'];
+export type HttpErrorStatusCodeStatus = (typeof HttpErrorStatus)[number]['status'];
+export type HttpErrorStatusCodeKeys = HttpErrorStatusCodeNames | HttpErrorStatusCodeStatus;
 
 export interface HttpErrorOptions extends CoreErrorOptions {
   keepRequest?: boolean; // default: false
@@ -21,12 +21,12 @@ export interface HttpErrorOptions extends CoreErrorOptions {
 }
 
 export class HttpError extends CoreError {
-  public status: ErrorStatusCodeStatus;
+  public status: HttpErrorStatusCodeStatus;
   public keepRequest: boolean;
   public keepResponse: boolean;
 
-  constructor(status: ErrorStatusCodeKeys = 500, message: string | null = null, options?: HttpErrorOptions | null) {
-    const err = ErrorStatus.find((err) => err.status === status || err.name === status);
+  constructor(status: HttpErrorStatusCodeKeys = 500, message: string | null = null, options?: HttpErrorOptions | null) {
+    const err = HttpErrorStatus.find((err) => err.status === status || err.name === status);
     super(err?.code || 0, message || err?.message || 'unknown error', options);
 
     this.status = err?.status || 500;
@@ -36,7 +36,7 @@ export class HttpError extends CoreError {
 }
 
 export const HttpErr = (
-  status: ErrorStatusCodeKeys = 500,
+  status: HttpErrorStatusCodeKeys = 500,
   message: string | null = null,
   options?: HttpErrorOptions | null
 ) => {
