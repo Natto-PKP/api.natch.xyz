@@ -21,6 +21,7 @@ Table platform {
   platform_secret text [note: "hashed - secret token"]
   platform_token text [note: "hashed - access token"]
   is_nsfw bool [not null, default: false, note: "nsfw account, don't show it"]
+  is_verified bool [not null, default: false, note: "verified account"]
   Note: "An account on another platform, linked to an user. Can be used to display a profile page or to login."
 }
 
@@ -34,6 +35,7 @@ Table user {
   allow_nsfw bool [not null, default: false, note: "allow nsfw content"]
   // allow_free_follow bool [not null, default: false, note: "allow free follow"]
   // allow_follow_request bool [not null, default: false, note: "allow follow request"]
+  roles bigint [not null, default: 0, note: "roles of the user"]
   settings json [not null, note: "settings of the user"]
   Note: "An human"
 }

@@ -17,6 +17,7 @@ export interface IPlatform extends ICore {
   platformId?: string | null;
   platformSecret?: string | null;
   platformToken?: string | null;
+  isVerified: boolean;
   isNsfw: boolean;
 }
 
@@ -60,6 +61,11 @@ export class PlatformModel extends CoreModel implements IPlatform {
   @AllowNull(true)
   @Column({ type: DataType.TEXT })
   declare platformToken?: string | null;
+
+  @AllowNull(false)
+  @Default(false)
+  @Column({ type: DataType.BOOLEAN })
+  declare isVerified: boolean;
 
   @AllowNull(false)
   @Default(false)
