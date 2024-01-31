@@ -18,6 +18,7 @@ export interface IProfile extends ICore {
   identifier: string;
   name: string;
   pseudo: string;
+  displayUserTags: bigint;
   avatar?: string | null;
   banner?: string | null;
   primaryColor?: string | null;
@@ -26,9 +27,10 @@ export interface IProfile extends ICore {
   status?: string | null;
   aboutMe?: string | null;
   languages: bigint;
-  isPrivate: boolean;
-  isDefault: boolean;
-  isNsfw: boolean;
+  tags: bigint;
+  // isPrivate: boolean;
+  // isDefault: boolean;
+  // isNsfw: boolean;
   userId: string;
 }
 
@@ -53,6 +55,11 @@ export class ProfileModel extends CoreModel implements IProfile {
   @AllowNull(false)
   @Column({ type: DataType.TEXT, validate: { is: PseudoRegex } })
   declare pseudo: string;
+
+  @AllowNull(false)
+  @Default(0n)
+  @Column({ type: DataType.BIGINT })
+  declare displayUserTags: bigint;
 
   @AllowNull(true)
   @Column({ type: DataType.TEXT })
@@ -88,19 +95,9 @@ export class ProfileModel extends CoreModel implements IProfile {
   declare languages: bigint;
 
   @AllowNull(false)
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  declare isPrivate: boolean;
-
-  @AllowNull(false)
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  declare isDefault: boolean;
-
-  @AllowNull(false)
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  declare isNsfw: boolean;
+  @Default(0n)
+  @Column({ type: DataType.BIGINT })
+  declare tags: bigint;
 
   @ForeignKey(() => UserModel)
   @Column({ type: DataType.STRING })

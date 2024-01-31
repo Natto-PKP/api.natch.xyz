@@ -26,9 +26,7 @@ export interface ITeam extends ICore {
   description?: string | null;
   cagegories: bigint;
   languages: bigint;
-  isPrivate: boolean;
-  isNsfw: boolean;
-  isVerified: boolean;
+  tags: bigint;
   userCanJoin: boolean;
   icon?: string | null;
   banner?: string | null;
@@ -80,19 +78,9 @@ export class TeamModel extends CoreModel implements ITeam {
   declare languages: bigint;
 
   @AllowNull(false)
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  declare isPrivate: boolean;
-
-  @AllowNull(false)
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  declare isNsfw: boolean;
-
-  @AllowNull(false)
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  declare isVerified: boolean;
+  @Default(0)
+  @Column({ type: DataType.BIGINT })
+  declare tags: bigint;
 
   @AllowNull(false)
   @Default(false)

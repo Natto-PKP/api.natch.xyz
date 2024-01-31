@@ -10,8 +10,8 @@ export interface IUser extends ICore {
   username: string;
   email?: string | null;
   password?: string | null;
-  isVerified: boolean;
   allowNsfw: boolean;
+  tags: bigint;
   settings: IUserSettings;
 }
 
@@ -49,12 +49,12 @@ export class UserModel extends CoreModel implements IUser {
   @AllowNull(false)
   @Default(false)
   @Column({ type: DataType.BOOLEAN })
-  declare isVerified: boolean;
+  declare allowNsfw: boolean;
 
   @AllowNull(false)
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  declare allowNsfw: boolean;
+  @Default(0n)
+  @Column({ type: DataType.BIGINT })
+  declare tags: bigint;
 
   @AllowNull(false)
   @Default(DEFAULT_USER_SETTINGS)

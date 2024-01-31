@@ -17,12 +17,11 @@ Table user {
   identifier text [not null, unique, note: "readable id"]
   username text [not null, unique, note: "eg: some_user or someuser"]
   email text [unique, note: "email"]
-  password text [note: "hashed"] 
-  is_verified bool [not null, default: false, note: "verified account"]
+  password text [note: "hashed"]  
   allow_nsfw bool [not null, default: false, note: "allow nsfw content"]
   // allow_free_follow bool [not null, default: false, note: "allow free follow"]
   // allow_follow_request bool [not null, default: false, note: "allow follow request"]
-  roles bigint [not null, default: 0, note: "roles of the user"]
+  tags bigint [not null, default: 0, note: "tags of the user"]
   settings json [not null, note: "settings of the user"]
   Note: "An human"
 }
@@ -63,6 +62,7 @@ Table profile {
   identifier text [not null, unique, note: "readable id"]
   name text [not null, note: "eg: Some Profile", default: "Some User"]
   pseudo text [not null, note: "eg: Some User"] 
+  display_user_tags bigint [not null, default: 0, note: "tags to display in the profile, user need to have the tag"]
   avatar text [note: "url of the avatar or id of the file"]
   banner text [note: "url of the banner or id of the file"]
   primary_color text [note: "primary color of the user profile"]
@@ -71,9 +71,7 @@ Table profile {
   status text [note: "status of the user profile"]
   about_me text [note: "about me of the user profile"]
   languages bigint [not null, default: 0, note: "languages of the user profile"]
-  is_private bool [not null, default: true, note: "private profile, don't show in search"]
-  is_default bool [not null, default: false, note: "default profile"]
-  is_nsfw bool [not null, default: false, note: "nsfw profile, don't show in search"]
+  tags bigint [not null, default: 0, note: "tags of the user profile"]
   Note: "A profile, allow to customize a user profile. A user has multiple profiles. An user need at least one profile"
 }
 
@@ -106,9 +104,7 @@ Table team {
   description text [note: "eg: long description of the team with markdown"]
   categories bigint [not null, default: 0, note: "tags of the team"]
   languages bigint [not null, default: 0, note: "languages of the team"]
-  is_private bool [not null, default: true, note: "private team, don't show in search"]
-  is_nsfw bool [not null, default: false, note: "nsfw team, don't show in search"]
-  is_verified bool [not null, default: false, note: "verified team"]
+  tags bigint [not null, default: 0, note: "tags of the team"]
   user_can_join bool [not null, default: true, note: "allow users to join the team"]
   icon text [note: "url of the icon or id of the file"]
   banner text [note: "url of the banner or id of the file"]
