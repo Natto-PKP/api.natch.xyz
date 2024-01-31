@@ -7,7 +7,7 @@ export * from './user_has_platform/UserHasPlatformModel';
 
 // Profile
 export * from './profile/ProfileModel';
-export * from './profile_has_plateform/ProfileHasPlatformModel';
+export * from './profile_has_platform/ProfileHasPlatformModel';
 export * from './profile_has_tag/ProfileHasTagModel';
 
 // Team
