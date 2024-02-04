@@ -33,12 +33,36 @@ export class HttpError extends CoreError {
     this.keepRequest = options?.keepRequest ?? false;
     this.keepResponse = options?.keepResponse ?? false;
   }
-}
 
-export const HttpErr = (
-  status: HttpErrorStatusCodeKeys = 500,
-  message: string | null = null,
-  options?: HttpErrorOptions | null
-) => {
-  return new HttpError(status, message, options);
-};
+  static badRequest(message: string | null = null, options?: HttpErrorOptions | null) {
+    return new HttpError(400, message, options);
+  }
+
+  static unauthorized(message: string | null = null, options?: HttpErrorOptions | null) {
+    return new HttpError(401, message, options);
+  }
+
+  static forbidden(message: string | null = null, options?: HttpErrorOptions | null) {
+    return new HttpError(403, message, options);
+  }
+
+  static notFound(message: string | null = null, options?: HttpErrorOptions | null) {
+    return new HttpError(404, message, options);
+  }
+
+  static conflict(message: string | null = null, options?: HttpErrorOptions | null) {
+    return new HttpError(409, message, options);
+  }
+
+  static internal(message: string | null = null, options?: HttpErrorOptions | null) {
+    return new HttpError(500, message, options);
+  }
+
+  static notImplemented(message: string | null = null, options?: HttpErrorOptions | null) {
+    return new HttpError(501, message, options);
+  }
+
+  static unavailable(message: string | null = null, options?: HttpErrorOptions | null) {
+    return new HttpError(503, message, options);
+  }
+}

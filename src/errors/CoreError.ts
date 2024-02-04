@@ -39,7 +39,3 @@ export class CoreError extends Error {
     this.logit = options?.logit ?? true;
   }
 }
-
-export const CoreErr = (code: ErrorCodeKeys = 0, message: string | null = null, options?: CoreErrorOptions | null) => {
-  return new CoreError(code, message, options);
-};
